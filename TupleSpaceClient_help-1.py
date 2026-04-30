@@ -61,6 +61,11 @@ def main():
             # - Send:    sock.sendall(message.encode())
             # - Receive: first read 3 bytes to get the response size (like the server does).
             #            Then read the remaining (size - 3) bytes to get the response body.
+            sock.sendall(message.encode())
+            len_buf = sock.recv(3)
+            resp_size = int(len_buf.decode())
+            sock.recv(1)
+            response_buffer = sock.recv(resp_size)
 
 
             response = response_buffer.decode().strip()
@@ -72,6 +77,9 @@ def main():
     finally:
         # TASK 4: Close the socket when done (already called for you — explain why
         # finally: is the right place to do this even if an error occurs above).
+        # The finally block always executes no matter whether an error occurs or the program runs normally.
+        # This guarantees that the socket will be closed properly under all circumstances, preventing resource leaks, leftover connections, and port occupation issues.
+        # Even if an exception is thrown during socket communication, sock.close() will still run, making the program safe and reliable.
         sock.close()
 
 if __name__ == "__main__":
