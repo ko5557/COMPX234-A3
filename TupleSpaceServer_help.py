@@ -122,6 +122,11 @@ def handle_request(message):
             # TASK 3: READ — look up key in tuple_space.
             # Return "OK (<key>, <value>) read" or "ERR <key> does not exist".
             increment_stat("read_count")
+            if key in tuple_space:
+                val = tuple_space[key]
+                return f"OK ({key}, {val}) read"
+            else:
+                return f"ERR {key} does not exist"
 
 
         elif op == "G":
@@ -129,6 +134,7 @@ def handle_request(message):
             # Return "OK (<key>, <value>) removed" or "ERR <key> does not exist".
             # Hint: dict.pop(key, None) removes and returns the value, or None if missing.
             increment_stat("get_count")
+            
 
 
         elif op == "P":
