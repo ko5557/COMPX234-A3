@@ -134,7 +134,11 @@ def handle_request(message):
             # Return "OK (<key>, <value>) removed" or "ERR <key> does not exist".
             # Hint: dict.pop(key, None) removes and returns the value, or None if missing.
             increment_stat("get_count")
-            
+            val = tuple_space.pop(key, None)
+            if val is not None:
+                return f"OK ({key}, {val}) removed"
+            else:
+                return f"ERR {key} does not exist"
 
 
         elif op == "P":
@@ -146,6 +150,7 @@ def handle_request(message):
             # Validate: len(value) <= 999 and len(key + " " + value) <= 970.
             # Return "OK (<key>, <value>) added" or "ERR <key> already exists".
             increment_stat("put_count")
+            
 
 
         else:
