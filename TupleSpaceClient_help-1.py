@@ -21,6 +21,8 @@ def main():
     # TASK 1: Create a TCP/IP socket and connect it to the server.
     # Hint: socket.socket(socket.AF_INET, socket.SOCK_STREAM) creates the socket.
     # Then call sock.connect((hostname, port)) to connect.
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((hostname, port))
 
 
     try:
@@ -40,6 +42,19 @@ def main():
             # X is "R" for READ and "G" for GET.
             # Hint: for READ/GET, size = 6 + len(key). For PUT, size = 7 + len(key) + len(value).
             # Reject lines with invalid format or key+" "+value > 970 chars.
+            if cmd == "READ":
+                key = parts[1]
+                body = "R " + key
+                message = f"{len(body):03d}{body}"
+            elif cmd == "GET":
+                key = parts[1]
+                body = "G " + key
+                message = f"{len(body):03d}{body}"
+            elif cmd == "PUT":
+                key = parts[1]
+                value = parts[2]
+                body = "P " + key + " " + value
+                message = f"{len(body):03d}{body}"
 
 
             # TASK 3: Send the message to the server, then receive the response.
